@@ -5,15 +5,22 @@ import { logError } from '../shared/log-helper';
 export function addTsconfigPaths(): Rule {
   return (tree: Tree) => {
     try {
-      const tsconfig = JSON.parse(tree.read('tsconfig.json').toString());
+      // While reading the tsconfig, use a regex replacement https://www.regextester.com/94245
+      // to ensure no **JSON comments** are present. Comments lead to a JSON.parse error.
+      const tsconfig = JSON.parse(
+        tree
+          .read('tsconfig.json')
+          .toString()
+          .replace(/\/\*[\s\S]*?\*\/|([^:]|^)\/\/.*$/gm, '')
+      );
       const angularJSON = JSON.parse(tree.read('angular.json').toString());
-      const librayProjectNames = getLibraryProjectNames(angularJSON);
+      const libraryProjectNames = getLibraryProjectNames(angularJSON);
 
       if (!tsconfig.compilerOptions.paths) {
         tsconfig.compilerOptions.paths = {};
       }
 
-      librayProjectNames.forEach((libraryProjectName: string) => {
+      libraryProjectNames.forEach((libraryProjectName: string) => {
         tsconfig.compilerOptions.paths[`${libraryProjectName}/*`] = [
           `projects/${libraryProjectName}/*`,
           `projects/${libraryProjectName}`

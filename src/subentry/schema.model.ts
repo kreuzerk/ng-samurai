@@ -7,5 +7,6 @@ export interface Schema {
   generateModule?: boolean;
   style?: string;
   inlineStyle?: boolean;
+  inlineTemplate?: boolean;
   skipTests?: boolean;
 }

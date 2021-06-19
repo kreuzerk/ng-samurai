@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "NgSamuraiSubentry",
+  "$id": "NgSamuraiSubentry",
   "title": "Angular SubModule Options Schema",
   "type": "object",
   "description": "Creates a new sub-module for Angular library in the given or default project.",
